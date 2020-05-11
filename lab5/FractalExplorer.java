@@ -91,14 +91,12 @@ public class FractalExplorer {
         }
     }
 
-    /** Simple handler to zoom in on the clicked pixel. **/
+
     public class MouseHandler extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
-            double xCoord = FractalGenerator.getCoord(range.x,
-                    range.x + range.width, dispSize, e.getX());
-            double yCoord = FractalGenerator.getCoord(range.y,
-                    range.y + range.width, dispSize, e.getY());
+            double xCoord = FractalGenerator.getCoord(range.x, range.x + range.width, dispSize, e.getX());
+            double yCoord = FractalGenerator.getCoord(range.y, range.y + range.width, dispSize, e.getY());
             gen.recenterAndZoomRange(range, xCoord, yCoord, 0.5);
             drawFractal();
         }
