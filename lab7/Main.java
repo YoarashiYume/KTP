@@ -14,7 +14,7 @@ public class Main{
     public static void showResult(LinkedList<URLDepthPair> resultLink)
     {
         for (URLDepthPair c : resultLink)
-            System.out.println(c.toString());
+            System.out.println(c.toString()+" "+c.getDepth());
     }
     public static void request(PrintWriter out,URLDepthPair pair)
     {
@@ -72,7 +72,7 @@ public class Main{
     }
    public static void main(String[] args)
    {
-       //String[] arg = new String[]{"http://government.ru/","1"};
+      // String[] arg = new String[]{"http://government.ru/","2"};
        //if (arg.length>2)
        if (args.length>2)
            System.out.println("usage: java Crawler <URL><depth>");
@@ -81,8 +81,8 @@ public class Main{
            boolean isDigit = true;
           // for (int i = 0; i< arg[1].length()&&isDigit;i++)
            for (int i = 0; i< args[1].length()&&isDigit;i++)
-               isDigit = Character.isDigit(args[1].charAt(i));
-          // searchURLs(arg[0],Integer.parseInt(arg[1]));
+              isDigit = Character.isDigit(args[1].charAt(i));
+           //if (isDigit) searchURLs(arg[0],Integer.parseInt(arg[1]));
            if (isDigit) searchURLs(args[0],Integer.parseInt(args[1]));
        }
    }
