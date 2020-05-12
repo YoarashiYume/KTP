@@ -3,7 +3,6 @@ package com.company;
 
 
 import java.util.HashMap;
-import java.util.WeakHashMap;
 
 /**
  * This class stores the basic state necessary for the A* algorithm to compute a
@@ -45,9 +44,9 @@ public class AStarState
      **/
     public Waypoint getMinOpenWaypoint()
     {
+        Waypoint minCostPoint = null;
         if (!openWaypoints.isEmpty())
         {
-            Waypoint minCostPoint = null;
             double minCost = Double.MAX_VALUE;
             for (Waypoint cWaypoint : openWaypoints.values())
                 if (cWaypoint.getTotalCost() < minCost)
@@ -55,10 +54,8 @@ public class AStarState
                     minCost = cWaypoint.getTotalCost();
                     minCostPoint = cWaypoint;
                 }
-            return minCostPoint;
         }
-        else
-            return null;
+        return minCostPoint;
     }
 
     /**
