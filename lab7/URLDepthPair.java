@@ -12,7 +12,7 @@ public class URLDepthPair {
         try {
             this.url =new URL(url);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            this.url = null;
         }
     }
     public int getDepth()
