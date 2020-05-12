@@ -1,89 +1,49 @@
 package com.company;
 
-import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.HashSet;
 import java.util.LinkedList;
 
-public class Main{
-    public static final String URL_PREFIX = "<a href=\"http";
-    static LinkedList<URLDepthPair> findLink = new LinkedList<URLDepthPair>();
-    static LinkedList<String> visitedLink = new LinkedList<String>();
-    static LinkedList<URLDepthPair> resultLink = new LinkedList<URLDepthPair>();
+public class Main {
     public static void showResult(LinkedList<URLDepthPair> resultLink)
     {
         for (URLDepthPair c : resultLink)
-            System.out.println(c.toString()+" "+c.getDepth());
+            System.out.println("Depth :" + c.getDepth()+"\tLink :"+c.toString());
     }
-    public static void request(PrintWriter out,URLDepthPair pair)
+    public static boolean checkDigit(String line)
     {
-        out.println("GET " + pair.getPath() + " HTTP/1.1");
-        out.println("Host: " + pair.getHost());
-        out.println("Connection: close");
-        out.println();
-        out.flush();
+        boolean isDigit = true;
+        for (int i = 0; i < line.length() && isDigit; i++)
+            isDigit = Character.isDigit(line.charAt(i));
+        return isDigit;
     }
-    public static void searchURLs(String urlString, int maxDepth)
+    public static void main(String[] args)
     {
-        URLDepthPair urlPair = new URLDepthPair(urlString, 0);
-        findLink.add(urlPair);
-        visitedLink.add(urlString);
-        while (!findLink.isEmpty()) {
-            URLDepthPair currentPair = findLink.removeFirst();
-            int depth = currentPair.getDepth();
-            try {
-                Socket s = new Socket(currentPair.getHost(), 80);
-                s.setSoTimeout(1000);
-                PrintWriter out =  new PrintWriter(s.getOutputStream(), true);
-                BufferedReader in =  new BufferedReader(new InputStreamReader(s.getInputStream()));
-                request(out,currentPair);
-                String line;
-                while ((line = in.readLine()) != null) {
-                    if (line.indexOf(URL_PREFIX) > 0) {
-                        boolean isLinkFound = false;
-                        StringBuilder currentLink = new StringBuilder();
-                        char c = line.charAt(line.indexOf(URL_PREFIX) + 9);
-                        currentLink.append(c);
-                        for(int i = line.indexOf(URL_PREFIX) + 10;c != '"' && i < line.length() - 1;i++)
-                        {
-                            c = line.charAt(i);
-                            if (c == '"')
-                                isLinkFound = true;
-                            else
-                                currentLink.append(c);
-                        }
-                        if (isLinkFound && depth < maxDepth)
-                                if(!visitedLink.contains(currentLink.toString()))
-                                {
-                                    URLDepthPair newPair = new URLDepthPair(currentLink.toString(), depth + 1);
-                                    findLink.add(newPair);
-                                    visitedLink.add(currentLink.toString());
-                                }
-                    }
+        args = new String[]{"http://government.ru/", "2", "3"};
+        if (args.length == 3&&checkDigit(args[1])&&checkDigit(args[2]))
+        {
+            String lineUrl = args[0];
+            int numThreads = Integer.parseInt(args[2]);
+            URLPool pool = new URLPool(Integer.parseInt(args[1]));
+            pool.addPair(new URLDepthPair(lineUrl, 0));
+            for (int i = 0; i < numThreads; i++) {
+                CrawlerTask c = new CrawlerTask(pool);
+                Thread t = new Thread(c);
+                t.start();
+            }
+
+            while (pool.getWait() != numThreads) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    System.out.println("Ignoring  InterruptedException");
                 }
-                s.close();
-                resultLink.add(currentPair);
             }
-            catch (IOException e) {
-            }
+            showResult(pool.getResult());;
+            System.exit(0);
         }
-        showResult(resultLink);
+        else
+        {
+            System.out.println("usage: java Crawler <URL> <maximum_depth> <num_threads>");
+        }
     }
-   public static void main(String[] args)
-   {
-      // String[] arg = new String[]{"http://government.ru/","2"};
-       //if (arg.length>2)
-       if (args.length>2)
-           System.out.println("usage: java Crawler <URL><depth>");
-       else
-       {
-           boolean isDigit = true;
-          // for (int i = 0; i< arg[1].length()&&isDigit;i++)
-           for (int i = 0; i< args[1].length()&&isDigit;i++)
-              isDigit = Character.isDigit(args[1].charAt(i));
-           //if (isDigit) searchURLs(arg[0],Integer.parseInt(arg[1]));
-           if (isDigit) searchURLs(args[0],Integer.parseInt(args[1]));
-       }
-   }
+
 }

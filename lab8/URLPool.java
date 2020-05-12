@@ -3,52 +3,67 @@ package com.company;
 import java.util.LinkedList;
 
 public class URLPool {
-    private LinkedList<URLDepthPair> unScanUrl;
-    private LinkedList<URLDepthPair> allUnScanUrl;
-    private LinkedList<String> allUrl;
-    private int depth;
-    private int maxDepth;
-    private int tWait;
+    LinkedList<URLDepthPair> findUrls;
+    LinkedList<URLDepthPair> resultUrls;
+    int maxDepth;
+    int cWait;
 
-    public URLPool(int maxDepth) {
+    public URLPool(int maxDepth)
+    {
         this.maxDepth = maxDepth;
-        unScanUrl = new LinkedList<URLDepthPair>();
-        allUnScanUrl = new LinkedList<URLDepthPair>();
-        tWait = 0;
-        allUrl = new LinkedList<String>();
+        findUrls = new LinkedList<URLDepthPair>();
+        resultUrls = new LinkedList<URLDepthPair>();
+        cWait = 0;
     }
 
-    public synchronized void addPair(URLDepthPair currentPair) {
-        if (allUrl.indexOf(currentPair.toString()) != -1) {
-            allUnScanUrl.add(currentPair);
-            if (currentPair.getDepth() < maxDepth) {
-                unScanUrl.add(currentPair);
+    private static boolean check(LinkedList<URLDepthPair> resultLink,URLDepthPair pair)
+    {
+        boolean isAlready = true;
+        for (URLDepthPair c : resultLink)
+            if (c.toString().equals(pair.toString()))
+                isAlready=false;
+        return isAlready;
+    }
+    public synchronized URLDepthPair getPair()
+    {
+        while (findUrls.size() == 0) {
+            cWait++;
+            try
+            {
+                wait();
+            }
+            catch (InterruptedException e)
+            {
+                System.out.println("Ignoring InterruptedException");
+            }
+            cWait--;
+        }
+        URLDepthPair nextPair = findUrls.getFirst();
+        findUrls.removeFirst();
+        return nextPair;
+    }
+
+    public synchronized void addPair(URLDepthPair pair)
+    {
+        if(check(resultUrls,pair))
+        {
+            resultUrls.add(pair);
+            if (pair.getDepth() < maxDepth)
+            {
+                findUrls.add(pair);
                 notify();
             }
         }
     }
-    public LinkedList<URLDepthPair> getUrls()
+
+    public synchronized int getWait()
     {
-        return allUnScanUrl;
+        return cWait;
     }
-    public int getTWait()
+
+    public LinkedList<URLDepthPair> getResult()
     {
-        return tWait;
-    }
-    public synchronized URLDepthPair getNextPair() {
-        while (unScanUrl.size() == 0) {
-            try {
-                tWait++;
-                wait();
-                tWait--;
-            } catch (InterruptedException e) {
-                System.out.println("Caught unexpected " +
-                        "InterruptedException, ignoring...");
-            }
-        }
-        URLDepthPair nextPair = unScanUrl.getFirst();
-        unScanUrl.removeFirst();
-        return nextPair;
+        return resultUrls;
     }
 
 }
