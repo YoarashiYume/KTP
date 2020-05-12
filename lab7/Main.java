@@ -9,12 +9,19 @@ import java.util.LinkedList;
 public class Main{
     public static final String URL_PREFIX = "<a href=\"http";
     static LinkedList<URLDepthPair> findLink = new LinkedList<URLDepthPair>();
-    static LinkedList<String> visitedLink = new LinkedList<String>();
     static LinkedList<URLDepthPair> resultLink = new LinkedList<URLDepthPair>();
     public static void showResult(LinkedList<URLDepthPair> resultLink)
     {
         for (URLDepthPair c : resultLink)
-            System.out.println(c.toString()+" "+c.getDepth());
+            System.out.println(c.toString());
+    }
+    public static boolean check(LinkedList<URLDepthPair> resultLink,URLDepthPair pair)
+    {
+        boolean isAlready = true;
+        for (URLDepthPair c : resultLink)
+           if (c.toString().equals(pair.toString()))
+               isAlready=false;
+           return isAlready;
     }
     public static void request(PrintWriter out,URLDepthPair pair)
     {
@@ -28,7 +35,6 @@ public class Main{
     {
         URLDepthPair urlPair = new URLDepthPair(urlString, 0);
         findLink.add(urlPair);
-        visitedLink.add(urlString);
         while (!findLink.isEmpty()) {
             URLDepthPair currentPair = findLink.removeFirst();
             int depth = currentPair.getDepth();
@@ -53,16 +59,16 @@ public class Main{
                             else
                                 currentLink.append(c);
                         }
-                        if (isLinkFound && depth < maxDepth)
-                                if(!visitedLink.contains(currentLink.toString()))
-                                {
-                                    URLDepthPair newPair = new URLDepthPair(currentLink.toString(), depth + 1);
-                                    findLink.add(newPair);
-                                    visitedLink.add(currentLink.toString());
-                                }
+                        if (isLinkFound && depth < maxDepth) {
+                            URLDepthPair newPair = new URLDepthPair(currentLink.toString(), depth + 1);
+                            if (check(findLink,newPair)) {
+                                findLink.add(newPair);
+                            }
+                        }
                     }
                 }
                 s.close();
+                if (check(resultLink,currentPair))
                 resultLink.add(currentPair);
             }
             catch (IOException e) {
@@ -72,18 +78,18 @@ public class Main{
     }
    public static void main(String[] args)
    {
-      // String[] arg = new String[]{"http://government.ru/","2"};
+       String[] arg = new String[]{"http://government.ru/","1"};
        //if (arg.length>2)
-       if (args.length>2)
-           System.out.println("usage: java Crawler <URL><depth>");
-       else
+       //if (args.length>2)
+           //System.out.println("usage: java Crawler <URL><depth>");
+       //else
        {
            boolean isDigit = true;
           // for (int i = 0; i< arg[1].length()&&isDigit;i++)
-           for (int i = 0; i< args[1].length()&&isDigit;i++)
-              isDigit = Character.isDigit(args[1].charAt(i));
-           //if (isDigit) searchURLs(arg[0],Integer.parseInt(arg[1]));
-           if (isDigit) searchURLs(args[0],Integer.parseInt(args[1]));
+          // for (int i = 0; i< args[1].length()&&isDigit;i++)
+         //     isDigit = Character.isDigit(args[1].charAt(i));
+           if (isDigit) searchURLs(arg[0],Integer.parseInt(arg[1]));
+           //if (isDigit) searchURLs(args[0],Integer.parseInt(args[1]));
        }
    }
 }
