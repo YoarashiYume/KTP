@@ -17,7 +17,7 @@ public class Main {
     }
     public static void main(String[] args)
     {
-        //args = new String[]{"http://government.ru/", "2", "3"};
+        //args = new String[]{"http://government.ru/", "1", "3"};
         if (args.length == 3&&checkDigit(args[1])&&checkDigit(args[2]))
         {
             String lineUrl = args[0];
@@ -37,12 +37,18 @@ public class Main {
                     System.out.println("Ignoring  InterruptedException");
                 }
             }
-            showResult(pool.getResult());;
+            try {
+                showResult(pool.getResult());;
+            }
+            catch (NullPointerException e)
+            {
+                System.out.println("Not Link");
+            }
             System.exit(0);
         }
         else
         {
-            System.out.println("usage: java Crawler <URL> <maximum_depth> <num_threads>");
+            System.out.println("usage: java Crawler <URL> <maximum_depth> <num_threads> or second/third not digit");
         }
     }
 

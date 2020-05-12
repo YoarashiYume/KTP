@@ -43,27 +43,33 @@ public class CrawlerTask implements Runnable{
     {
         while (true)
         {
-            URLDepthPair pair = urlPool.getPair();
-            int currDepth = pair.getDepth();
             try {
-                Socket s = new Socket(pair.getHost(), 80);
-                s.setSoTimeout(1000);
-                PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-                BufferedReader in =  new BufferedReader(new InputStreamReader(s.getInputStream()));
-                request(out,pair);
-                String line;
-                while ((line = in.readLine()) != null)
-                {
-                    if (line.indexOf(URL_PREFIX) != -1)
+                URLDepthPair pair = urlPool.getPair();
+                int currDepth = pair.getDepth();
+                try {
+                    Socket s = new Socket(pair.getHost(), 80);
+                    s.setSoTimeout(1000);
+                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                    BufferedReader in =  new BufferedReader(new InputStreamReader(s.getInputStream()));
+                    request(out,pair);
+                    String line;
+                    while ((line = in.readLine()) != null)
                     {
-                        buildNewUrl(line,currDepth,urlPool);
+                        if (line.indexOf(URL_PREFIX) != -1)
+                        {
+                            buildNewUrl(line,currDepth,urlPool);
+                        }
                     }
+                    s.close();
                 }
-                s.close();
+                catch (IOException e)
+                {
+                }
             }
-            catch (IOException e)
+            catch (NullPointerException e)
             {
             }
+
         }
     }
 }
