@@ -17,7 +17,7 @@ public class Main {
     }
     public static void main(String[] args)
     {
-        //args = new String[]{"http://government.ru/", "1", "3"};
+        args = new String[]{"http://htmlbook.ru/", "1", "3"};
         if (args.length == 3&&checkDigit(args[1])&&checkDigit(args[2]))
         {
             String lineUrl = args[0];

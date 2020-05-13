@@ -24,18 +24,13 @@ public class CrawlerTask implements Runnable{
     }
     public static void buildNewUrl(String str,int depth,URLPool pool)
     {
-        StringBuilder currentLink = new StringBuilder();
-        char c = str.charAt(str.indexOf(URL_PREFIX) + SHIFT_INDEX);
-        currentLink.append(c);
-        for(int i = str.indexOf(URL_PREFIX) + SHIFT_INDEX+1;c != '"' && i < str.length() - 1;i++)
+        try
         {
-            c = str.charAt(i);
-            if (c == '"')
-            {
-                pool.addPair(new URLDepthPair(currentLink.toString(), depth + 1));
-            }
-            else
-                currentLink.append(c);
+            String currentLink = str.substring(str.indexOf(URL_PREFIX)+SHIFT_INDEX,str.indexOf("\"", str.indexOf(URL_PREFIX)+SHIFT_INDEX+1));
+            pool.addPair(new URLDepthPair(currentLink, depth + 1));
+        }
+        catch (StringIndexOutOfBoundsException e)
+        {
         }
     }
     @Override
