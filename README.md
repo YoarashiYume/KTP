@@ -8,7 +8,7 @@
 # Лабораторная работа №3
 * Директория [lab3](https://github.com/YoarashiYume/KTP/tree/master/lab3)
 * Файл, содержащий класс,который представляет координаты конкретной ячейки на карте   [Location.java](https://github.com/YoarashiYume/KTP/blob/master/lab3/Location.java)
-* Файл, содержащий класс,который предоставляет основные операции, необходимые для функционирования алгоритма поиска А-Star [AStarState.java]https://github.com/YoarashiYume/KTP/blob/master/lab3/AStarState.java)
+* Файл, содержащий класс,который предоставляет основные операции, необходимые для функционирования алгоритма поиска А-Star [AStarState.java](https://github.com/YoarashiYume/KTP/blob/master/lab3/AStarState.java)
 # Лабораторная работа №4
 * Директория [lab4](https://github.com/YoarashiYume/KTP/tree/master/lab4)
 * Файл, содержащий класс,который предоставляет операции для изменения пикселей изображения [JImageDisplay.java](https://github.com/YoarashiYume/KTP/blob/master/lab4/JImageDisplay.java)
