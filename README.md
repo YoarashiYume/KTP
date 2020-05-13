@@ -1,6 +1,7 @@
 # Лабораторная работа №1
-* Первое задание: вычисление простых чисел - файл [Primes.java](https://github.com/YoarashiYume/KTP/blob/master/Primes.java)
-* Второе задание: проверка строки на палиндром - файл [Palindromes.java](https://github.com/YoarashiYume/KTP/blob/master/Palindrome.java)
+*Директория [lab1](https://github.com/YoarashiYume/KTP/tree/master/lab1)
+* Первое задание: вычисление простых чисел - файл [Primes.java](https://github.com/YoarashiYume/KTP/blob/master/lab1/Primes.java)
+* Второе задание: проверка строки на палиндром - файл [Palindromes.java](https://github.com/YoarashiYume/KTP/blob/master/lab1/Palindrome.java)
 # Лабораторная работа №2
 * Директория [lab2](https://github.com/YoarashiYume/KTP/tree/master/lab2)
 * Файл, для запуска программы  [Main.java](https://github.com/YoarashiYume/KTP/blob/master/lab2/Main.java)
