@@ -89,8 +89,8 @@ public class Main{
            //for (int i = 0; i< arg[1].length()&&isDigit;i++)
               //isDigit = Character.isDigit(arg[1].charAt(i));
                 isDigit = Character.isDigit(args[1].charAt(i));
-            if (isDigit) searchURLs(args[0], Integer.parseInt(arg[1]));
-           //if (isDigit) searchURLs(arg[0],Integer.parseInt(args[1]));
+            if (isDigit) searchURLs(args[0], Integer.parseInt(args[1]));
+           //if (isDigit) searchURLs(arg[0],Integer.parseInt(arg[1]));
        }
    }
 }
