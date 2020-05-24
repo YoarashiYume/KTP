@@ -141,17 +141,20 @@ public class Fifth {
         String resultLine="";
         String vowels ="";
         for (char cChar:array[0].toCharArray())
-            vowels+= (cChar=='a' || cChar=='e' ||cChar=='i' || cChar=='o' || cChar=='u') ? cChar : "";//remembering all vowels
+            vowels+= (cChar=='a' || cChar=='e' ||cChar=='i' || cChar=='o' || cChar=='u')&&vowels.indexOf(cChar)==-1 ? cChar : "";//remembering all vowels
         for (String cString : array)
         {
             String tVowels="";
             boolean allVowel=true;
-            for (char cChar : cString.toCharArray())
-                if (cChar=='a' || cChar=='e' ||cChar=='i' || cChar=='o' || cChar=='u')//remembering all vowels in current word
-                    tVowels +=cChar;
-            for (char cChar:vowels.toCharArray())
-                allVowel = tVowels.indexOf(cChar)!=-1 ? allVowel : false;//if all vowels are from the first word in the current word
-            resultLine+= allVowel ? cString + " " : "";
+            for (char cChar : cString.toCharArray()) {
+                if ((cChar == 'a' || cChar == 'e' || cChar == 'i' || cChar == 'o' || cChar == 'u') && tVowels.indexOf(cChar) == -1)//remembering all vowels in current word
+                    tVowels += cChar;
+            }
+                if (tVowels.length()==vowels.length()) {
+                    for (char cChar : vowels.toCharArray())
+                        allVowel = tVowels.indexOf(cChar) != -1 ? allVowel : false;//if all vowels are from the first word in the current word
+                    resultLine += allVowel ? cString + " " : "";
+                }
         }
         return resultLine;
     }
